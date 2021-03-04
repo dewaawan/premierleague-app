@@ -47,7 +47,6 @@ Remove the margin in all browsers.
 
 body {
   margin: 0;
-  background-color: #ced6e0;
 }
 
 /**
@@ -31116,6 +31115,10 @@ video {
 
 .animate-bounce {
   animation: bounce 1s infinite;
+}
+
+body{
+  background-color: #dfe4ea;
 }
 
 @media (min-width: 640px) {
