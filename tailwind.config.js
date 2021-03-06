@@ -11,6 +11,7 @@ module.exports = {
       borderWidth: ['hover'],
       width: ['hover'],
       height: ['hover'],
+      backgroundImage: ['hover'],
     },
   },
   plugins: [],
