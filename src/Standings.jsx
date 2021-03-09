@@ -1,7 +1,24 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 export class Standings extends Component {
+    state = {
+        table : []
+    }
+
+    componentDidMount(){
+        axios.get('https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=4328&s=2020-2021')
+        .then(res => {
+            const tabel = res.data.table.map(res => res)
+            const peringkat = tabel.sort((a, b) => a.intRank - b.intRank)
+            this.setState({ 
+                table : peringkat
+             });
+        })
+    }
+
     render() {
+        const klasmen = this.state.table
         return (
             <div>
                 <div className="bg-gradient-to-r from-purple-700 to-purple-800 mx-0">
@@ -24,32 +41,23 @@ export class Standings extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr align="center" className="h-16 border-t border-gray-300">
-                                <td>1</td>
-                                <td align="left">Tottenham</td>
-                                <td align="left"><img className="h-7 w-7" src="https://resources.premierleague.com/premierleague/badges/25/t6@x2.png" alt="tottenham"/></td>
-                                <td>20</td>
-                                <td>18</td>
-                                <td>0</td>
-                                <td>2</td>
-                                <td>40</td>
-                                <td>10</td>
-                                <td>30</td>
-                                <td>36</td>
+                            {klasmen.map(res =>{
+                            return(
+                            <tr align="center" className=" h-12 border-t border-gray-300">
+                                <td className="text-base font-bold text-gray-700">{res.intRank}</td>
+                                <td align="left" className="text-base font-bold text-gray-700">{res.strTeam}</td>
+                                <td align="left"><img className="h-7 w-7" src={res.strTeamBadge} alt="tottenham"/></td>
+                                <td>{res.intPlayed}</td>
+                                <td>{res.intWin}</td>
+                                <td>{res.intDraw}</td>
+                                <td>{res.intLoss}</td>
+                                <td>{res.intGoalsFor}</td>
+                                <td>{res.intGoalsAgainst}</td>
+                                <td>{res.intGoalDifference}</td>
+                                <td className="text-base text-purple-800 font-bold">{res.intPoints}</td>
                             </tr>
-                            <tr align="center" className="h-16 border-t border-gray-300">
-                                <td>1</td>
-                                <td align="left">Tottenham</td>
-                                <td align="left"><img className="h-7 w-7" src="https://resources.premierleague.com/premierleague/badges/25/t6@x2.png" alt="tottenham"/></td>
-                                <td>20</td>
-                                <td>18</td>
-                                <td>0</td>
-                                <td>2</td>
-                                <td>40</td>
-                                <td>10</td>
-                                <td>30</td>
-                                <td>36</td>
-                            </tr>
+                                );
+                            } ).sort((a, b) => a - b)}
                         </tbody>
                     </table>
                 </div>
