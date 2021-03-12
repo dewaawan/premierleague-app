@@ -6,7 +6,8 @@ import axios from 'axios';
 export class Matches extends Component {
 
     state = {
-        matches : []
+        matches : [],
+        matchday : 1
     }
 
     componentDidMount(){
@@ -22,9 +23,27 @@ export class Matches extends Component {
         })
     }
 
+    prev = () => {
+        if(this.state.matchday > 1){
+            const p = this.state.matchday - 1
+            this.setState({
+                matchday: p
+            })
+        }
+    }
+
+    next = () => {
+        if(this.state.matchday < 38){
+            const n = this.state.matchday + 1
+            this.setState({
+                matchday: n
+            })
+        }
+    }
+
     render() {
         const match = this.state.matches
-        const m = match.filter(res => res.matchday === 1)
+        const m = match.filter(res => res.matchday === this.state.matchday)
         return (
             <div>
                 <div className="bg-gradient-to-r from-purple-700 to-purple-800 mx-0">
@@ -32,13 +51,13 @@ export class Matches extends Component {
                 </div>
 
                 <div className="container mx-auto flex flex-row justify-between border border-purple-800 rounded w-full my-10">
-                    <div className="text-xl px-36 py-3 font-bold text-purple-800 cursor-pointer hover:bg-purple-800 hover:text-gray-50">
+                    <div onClick={this.prev} className="text-xl px-36 py-3 font-bold text-purple-800 cursor-pointer hover:bg-purple-800 hover:text-gray-50">
                         <FontAwesomeIcon icon={faArrowLeft} /> Preview
                     </div>
                     <span className="text-xl font-bold py-3 text-purple-800">
-                        Matchday 1
+                        Matchday {this.state.matchday}
                     </span>
-                    <div className="text-xl px-36 py-3 font-bold text-purple-800 cursor-pointer hover:bg-purple-800 hover:text-gray-50">
+                    <div onClick={this.next} className="text-xl px-36 py-3 font-bold text-purple-800 cursor-pointer hover:bg-purple-800 hover:text-gray-50">
                         Next <FontAwesomeIcon icon={faArrowRight} />
                     </div>
                 </div>
@@ -47,11 +66,11 @@ export class Matches extends Component {
                     {m.map(res =>{
                     return (
                     <div className="grid grid-cols-7 mb-4 justify-between items-center border-t border-b hover:bg-purple-800 text-purple-800 hover:text-gray-50 border-purple-800 py-3">
-                        <div className="text-lg font-semibold grid grid-cols-3 col-span-5">
-                            <span align="right">{res.homeTeam.name}</span><div className="flex flex-row place-self-center justify-center space-x-4"><img className="h-7 w-7" src="https://resources.premierleague.com/premierleague/badges/25/t6@x2.png" alt="tottenham"/> <span align="center" className=" text-xl font-semibold bg-gray-900 text-white w-16 px-1">{res.score.fullTime.homeTeam} - {res.score.fullTime.awayTeam}</span> <img className="h-7 w-7" src="https://resources.premierleague.com/premierleague/badges/25/t8@x2.png" alt="Chelsea"/></div> <span align="left">{res.awayTeam.name}</span>
+                        <div className="text-base font-bold grid grid-cols-3 col-span-5">
+                            <span align="right">{res.homeTeam.name}</span><div className="flex flex-row place-self-center justify-center space-x-4"><img className="h-7 w-7" src={"https://crests.football-data.org/" + res.homeTeam.id + ".svg"} alt="tottenham"/> <span align="center" className=" text-xl font-semibold bg-gray-900 text-white w-16 px-1">{res.score.fullTime.homeTeam} - {res.score.fullTime.awayTeam}</span> <img className="h-7 w-7" src={"https://crests.football-data.org/" + res.awayTeam.id + ".svg"} alt="Chelsea"/></div> <span align="left">{res.awayTeam.name}</span>
                         </div>
                         <div className="text-sm font-medium">
-                            <FontAwesomeIcon icon={faFutbol} /> {res.referees[0].name}, <b>{res.referees[0].nationality}</b>
+                            <FontAwesomeIcon icon={faFutbol} /> {res.utcDate.slice(0,10)}<b>, {res.utcDate.slice(12,16)}</b>
                         </div>
                         <div align="right" className="">
                             <div align="center" className="mr-3 cursor-pointer self-center w-24">
